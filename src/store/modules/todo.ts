@@ -1,25 +1,10 @@
 import { defineStore } from "pinia";
+import { useStorage } from "@vueuse/core";
 import { TodoItem } from "../index.interface";
 
 export const useStoreTodo = defineStore("todo", {
   state: () => ({
-    todoList: [
-      {
-        id: 0,
-        title: "청소하기",
-        status: "active",
-      },
-      {
-        id: 1,
-        title: "공과금 내기",
-        status: "active",
-      },
-      {
-        id: 2,
-        title: "운동 30분하기",
-        status: "clear",
-      },
-    ] as TodoItem[],
+    todoList: useStorage("todoList", [] as TodoItem[]),
   }),
   getters: {},
   actions: {
@@ -27,7 +12,27 @@ export const useStoreTodo = defineStore("todo", {
       this.todoList.push(item);
     },
     removeTodoItem(id: number) {
-      this.todoList.splice(id, 1);
+      let index = null;
+      for (let i = 0; this.todoList.length > i; i++) {
+        const item = this.todoList[i];
+        if (item.id === id) {
+          console.log(item);
+          index = i;
+          break;
+        }
+      }
+      if (index !== null) {
+        this.todoList.splice(index, 1);
+      }
+    },
+    changedStatus({
+      id,
+      status,
+    }: {
+      id: TodoItem["id"];
+      status: TodoItem["status"];
+    }) {
+      this.todoList[id].status = status;
     },
   },
 });

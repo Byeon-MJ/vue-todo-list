@@ -5,6 +5,7 @@
         class="form-check-input mt-0"
         type="checkbox"
         :checked="props.status === 'clear'"
+        @change="hanldeChangeStatus"
       />
     </div>
     <input type="text" class="form-control" :value="props.title" disabled />
@@ -25,18 +26,26 @@ export default {
 </script>
 
 <script lang="ts" setup>
-import { defineProps, defineEmits } from "vue";
+import { defineProps } from "vue";
+import { useStoreTodo } from "@/store/modules/todo";
+import { TodoItem } from "@/store/index.interface";
 
-interface TodoItem {
-  id: number;
-  title: string;
-  status: "active" | "clear";
+interface Props {
+  id: TodoItem["id"];
+  title: TodoItem["title"];
+  status: TodoItem["status"];
 }
-
-const props = defineProps<TodoItem>();
-const emit = defineEmits(["remove:todo"]);
+const store = useStoreTodo();
+const props = defineProps<Props>();
 const handleRemoveItem = () => {
-  emit("remove:todo", props.id);
+  store.removeTodoItem(props.id);
+};
+const hanldeChangeStatus = () => {
+  const changeStatus = props.status === "active" ? "clear" : "active";
+  store.changedStatus({
+    id: props.id,
+    status: changeStatus,
+  });
 };
 </script>
 

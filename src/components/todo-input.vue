@@ -1,11 +1,12 @@
 <template>
-  <input type="text" 
-  class="form-control" 
-  placeholder="할 일을 입력해주세요."
-  :value="inputValue"
-  @keyup.enter="handleAddItem"/>
+  <input
+    type="text"
+    class="form-control"
+    placeholder="할 일을 입력해주세요."
+    :value="inputValue"
+    @keyup.enter="handleAddItem"
+  />
 </template>
-
 
 <script lang="ts">
 export default {
@@ -13,26 +14,28 @@ export default {
 };
 </script>
 
-
 <script lang="ts" setup>
-import { ref, defineEmits } from "vue";
+import { ref } from "vue";
+import { useStoreTodo } from "@/store/modules/todo";
 
+const store = useStoreTodo();
 const inputValue = ref("");
-const emit = defineEmits(["update:todo"]);
 
 const handleAddItem = (event: Event) => {
   const value = (event.target as HTMLInputElement).value;
   if (!value) return;
+  const length = store.todoList.length;
+  const createdId = length === 0 ? 0 : store.todoList[length - 1].id + 1;
+
   inputValue.value = value;
-  emit("update:todo", {
-    id: 1,
+  store.addTodoItem({
+    id: createdId,
     title: value,
     status: "active",
   });
   inputValue.value = "";
 };
 </script>
-
 
 <style lang="scss">
 .todo-input {
