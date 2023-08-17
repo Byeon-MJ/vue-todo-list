@@ -1,9 +1,11 @@
 <template>
   <div class="input-group">
     <div class="input-group-text">
-      <input class="form-check-input mt-0" type="checkbox" />
+      <input class="form-check-input mt-0" 
+      type="checkbox" 
+      :checked="props.status === 'clear'"/>
     </div>
-    <input type="text" class="form-control" value="밥 잘먹기" disabled />
+    <input type="text" class="form-control" :value="props.title" disabled />
     <button class="btn btn-outline-secondary" type="button">X</button>
   </div>
 </template>
@@ -16,7 +18,17 @@ export default {
 </script>
 
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { defineProps } from "vue";
+
+interface TodoItem {
+  id: number;
+  title: string;
+  status: "active" | "clear";
+}
+
+const props = defineProps<TodoItem>();
+</script>
 
 
 <style lang="scss">
