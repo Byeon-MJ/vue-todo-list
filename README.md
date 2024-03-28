@@ -1,5 +1,5 @@
 # todo-list
-
+- Vue를 처음 공부하면서 따라해 본 실습
 ## Project setup
 ```
 npm install
